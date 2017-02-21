@@ -7,6 +7,7 @@
 # Useful Tools
 
 * [Paket](https://fsprojects.github.io/Paket/) - Amazing Package Manager that lets you consume binaries *and* source code
+* [F# Project Scaffold](https://github.com/fsprojects/ProjectScaffold) - Clone this repo to get started creating your NuGet package
 
 # Screen recording tool
 
