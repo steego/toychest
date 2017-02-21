@@ -13,7 +13,7 @@ The goal of this repository is simple.  Fill it up with fun things to play with 
 
 ## What's in the chest?
 
-* Links to fun tools
+* (Links to fun tools)[tools.md]
 * Code snippets
 * Ideas / Adventures / Challenges
 
