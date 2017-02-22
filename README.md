@@ -1,4 +1,4 @@
-# Filling up the F# Toy Chest
+# Toy Making - Filling up the Toy Chest
 
 * What's the minimum thing you can do to get your idea our there so people can play with it?
 * How can you distill an idea to its essence so you can tweet it?
