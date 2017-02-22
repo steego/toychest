@@ -1,5 +1,7 @@
 # Toy Making - Filling up the Toy Chest
 
+Visit the [Wiki - What is the Toy Chest?](/steego/toychest/wiki/What-is-the-Toy-Chest%3F)
+
 ------------------------------------------------------
 
 ## What's the big idea?
