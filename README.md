@@ -17,9 +17,9 @@ something you'd like to share.  We're going to hack away with one singular goal:
 
 ## What kind of thing can I share?
 
-I want to encourage you to be really creative and try something.
+I want to encourage you to be really creative and try something.  Anything.
 
-* Small prototypes
+* [Small prototypes](code-snippets/patterns/singleton-maker.fsx)
 * A snippet showing how to use your favorite library or tool
 * A screencast
 * A small koan
