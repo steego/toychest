@@ -5,7 +5,7 @@ creative blocks.  Each card offers a challenging constraint or idea to that enco
 
 [An online example can be found here](http://www.oblicard.com/)
 
-## A Programmer's Deck of Cards
+## A Programmer's Deck of Cards for When You're Stuck
 
 * Remove a feature
 * Write it in pseudo code
@@ -23,3 +23,10 @@ creative blocks.  Each card offers a challenging constraint or idea to that enco
 * Break down all abstraction layers
 * Write out example input and output
 * Names evoke bias - Change all your variable and functions to single letters
+* Plagiarize  ...but credit the source.  ;)
+* Adhere to one principle religously.  Make your code blaspheme the rest
+* Abuse a GoF pattern
+* Make something you care about mutable/impure.
+* Solve it by designing a protocol
+* Imagine your mother is the user
+* Can you turn it into a [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type)?
