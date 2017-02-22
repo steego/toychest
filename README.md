@@ -12,7 +12,7 @@ something you'd like to share.  We're going to hack away with one singular goal:
 ## What do you need?
 
 * A device capable of compiling F#
-* [Any F# editor](tools.md)
+* [Any F# editor](tools.md) - The more the better.  I used LINQPad a lot, but it's not necessary.
 * Something you want to share
 
 ## What kind of thing can I share?
