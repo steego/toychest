@@ -31,3 +31,7 @@ I want to encourage you to be really creative and try something.
 
 * We'll have planty of things to play with - Give us your feedback
 * Play with something and tell someone what you like and don't like.
+
+## Stuck?
+
+* [Try some of these strategies](oblique-strategies.md)
