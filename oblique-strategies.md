@@ -18,3 +18,4 @@ creative blocks.  Each card offers a challenging constraint or idea to that enco
 * Sketch it and explain it to somebody else
 * Delete something and write it again
 * Do the last thing first
+* [Try a different programming style](https://github.com/crista/exercises-in-programming-style)
