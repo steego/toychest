@@ -20,7 +20,7 @@ The goal is for us to make something small and fun.  Ideally, your project shoul
 ## Agenda
 
 * 15 minutes - to go over ideas and materials
- * Fun for grownups - A review
+ * Fun for grown ups - A review
  * A quick overview of the toys you can play with
 * 90 minutes - Play time
 * 15-20 minutes - Optional show-and-tell
