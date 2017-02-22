@@ -38,6 +38,10 @@ At the end, we want to encourage you to share your thing *somewhere*.
 I want to encourage you to be really creative and try something.  Anything.
 
 * [Small prototypes](code-snippets/patterns/singleton-maker.fsx)
+
+## I have something I want to share before the meetup.
+
+* Great! Message me @sgoguen on Twitter or find some other way of getting a hold of me.
 * A snippet showing how to use your favorite library or tool
 * A screencast
 * A small koan
