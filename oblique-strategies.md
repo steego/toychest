@@ -19,3 +19,5 @@ creative blocks.  Each card offers a challenging constraint or idea to that enco
 * Delete something and write it again
 * Do the last thing first
 * [Try a different programming style](https://github.com/crista/exercises-in-programming-style)
+* Divide it into abstraction layers
+* Break down all abstraction layers
