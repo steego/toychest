@@ -1,13 +1,31 @@
 # Toy Making - Filling up the Toy Chest
 
-* What's the minimum thing you can do to get your idea our there so people can play with it?
-* How can you distill an idea to its essence so you can tweet it?
-* What are some way you can share incomplete ideas that others can pick up?
+------------------------------------------------------
 
-We'll start off with a brief talk/discussion, but bring your laptop some ideas or maybe
-something you'd like to share.  We're going to hack away with one singular goal:
+## What's the big idea?
 
-**Make something small and/or broken and share it!**
+The goal is for us to make something small and fun.  Ideally, your project should be at least one of these things:
+
+* Easy to share
+* Unprofessional
+* Non-rigorous
+* Not particularly impressive
+* Whimsicle 
+* Violates code standards
+* Half-conceived
+* A work-in-progress
+* Broken
+* Just a model or a picture
+
+## Agenda
+
+* 15 minutes - to go over ideas and materials
+ * Fun for grownups - A review
+ * A quick overview of the toys you can play with
+* 90 minutes - Play time
+* 15-20 minutes - Optional show-and-tell
+
+At the end, we want to encourage you to share your thing *somewhere*.
 
 ## What do you need?
 
@@ -34,4 +52,7 @@ I want to encourage you to be really creative and try something.  Anything.
 
 ## Stuck?
 
+* What's the minimum thing you can do to get your idea our there so people can play with it?
+* How can you distill an idea to its essence so you can tweet it?
+* What are some way you can share incomplete ideas that others can pick up?
 * [Try some of these strategies](oblique-strategies.md)
