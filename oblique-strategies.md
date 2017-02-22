@@ -21,3 +21,4 @@ creative blocks.  Each card offers a challenging constraint or idea to that enco
 * [Try a different programming style](https://github.com/crista/exercises-in-programming-style)
 * Divide it into abstraction layers
 * Break down all abstraction layers
+* Write out example input and output
