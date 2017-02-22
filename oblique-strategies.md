@@ -22,3 +22,4 @@ creative blocks.  Each card offers a challenging constraint or idea to that enco
 * Divide it into abstraction layers
 * Break down all abstraction layers
 * Write out example input and output
+* Names evoke bias - Change all your variable and functions to single letters
