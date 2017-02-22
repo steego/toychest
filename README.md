@@ -1,24 +1,37 @@
-# The Toy Chest
+# Toy Making - Filling up the Toy Chest
 
-The goal of this repository is simple.  Fill it up with fun things to play with just like a toy chest.  
+* What's the minimum thing you can do to get your idea our there so people can play with it?
+* How can you distill an idea to its essence so you can tweet it?
+* What are some way you can share incomplete ideas that others can pick up?
 
-## What kind of toys should be added?
+We'll start off with a brief talk/discussion, but bring your laptop some ideas or maybe
+something you'd like to share.  We're going to hack away with one singular goal:
 
-* Add things (pictures, code, words, links, videos) you think are fun or interesting.
-* Expand your definition of toys to include just about anything that may be fun or interesting.  
-* Fun isn't always had by playing with plastic things with batteries.  Fun can be had by:
- * Playing games (Both competitive or non-competitive)
- * Drawing Pictures (Modeling)
- * Creating open-ended adventures
+**Make something small and/or broken and share it!**
 
-## What's in the chest?
+## What do you need?
 
-* [Links to fun tools](tools.md)
-* Code snippets
-* Ideas / Adventures / Challenges
+* A device capable of compiling F#
+* [Any F# editor](tools.md)
+* Something you want to share
 
-## What are the rules?
+## What kind of thing can I share?
 
-* Have fun
-* Make something or make it better.
-* Play with something and tell someone how to make it better
+I want to encourage you to be really creative and try something.
+
+* Small prototypes
+* A snippet showing how to use your favorite library or tool
+* A screencast
+* A small koan
+* An open problem for other people to solve
+* A data model that's expressed nicely in F#
+* A 5 minute slide deck
+
+## Don't want to make something?
+
+* We'll have planty of things to play with - Give us your feedback
+* Play with something and tell someone what you like and don't like.
+
+## Stuck?
+
+* [Try some of these strategies](oblique-strategies.md)
