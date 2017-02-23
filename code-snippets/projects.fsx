@@ -6,8 +6,6 @@ open Dumper
 type Project = { Summary: string; DueDate: DateTime }
 
 type Person = { Name:string; Salary: int; Projects: Project list }
-
-let printPersonList = Printer.makePrinter<Person list>()
 let people = [
   { 
     Name = "Robert Jones"; Salary = 1000000; 

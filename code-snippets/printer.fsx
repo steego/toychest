@@ -1,59 +1,70 @@
 module Printer
 
+#load "type-info.fsx"
+#load "rules.fsx"
+
 open System
-open System.Collections
-open System.Linq
 open System.Text
+open System.Collections
+open TypeInfo
 
-let primitiveTypes = [typeof<int>; typeof<string>; typeof<DateTime>]
+let getTypeName(o:obj) = sprintf "Not matched: %s" (o.GetType().FullName)
 
-let isPrimitive(o:obj) = primitiveTypes.Contains(o.GetType())
-let isList(o:obj) = o :? IEnumerable
-let isObject(o:obj) = true
-
-let isSeq(t:System.Type) = t.GetInterface(typeof<System.Collections.IEnumerable>.Name) |> isNull |> not
-let isGenericSeq(t:Type) = isSeq(t) && t.GenericTypeArguments.Length >= 1
-
-
-
-let getProperties(t:Type) = 
-  [for p in t.GetProperties() do
-    if p.CanRead && p.GetIndexParameters().Length = 0 then
-      let safeGet(o:obj) = if isNull o then null else p.GetValue(o)
-      yield (p.Name, safeGet) ]
-
-
-
-let makePrinter<'a>() = 
-  //  Up here we'll precompute and prereflect what we need to
-  //  print our type... 'a
-
-  let rec printAny(level:int)(o:obj) = 
-    if isNull o then "<null>"
-    elif isPrimitive(o) then printValue(o)
-    elif isList(o) && level > 0 then printList level o
-    elif isObject(o) && level > 0 then printObject level o
-    else "..."
-  and printValue(o:obj) = System.Web.HttpUtility.HtmlEncode(o.ToString())
-  and printObject(level:int) (input:obj) = 
-    let properties = getProperties(input.GetType())
+let printObject(render:obj -> string) (getters:MemberGetter list) (o:obj) =
     let sb = new StringBuilder()
-    sb.AppendLine("<table border='1' cellpadding='3' cellspacing='0'>") |> ignore
-    for (propName, safeGet) in properties do
-      sb.AppendLine("<tr>") |> ignore
-      sb.AppendLine(sprintf "<th>%s</th>" propName) |> ignore
-      let propValue = input |> safeGet |> printAny (level - 1)
-      sb.AppendLine(sprintf "<td>%s</td>" propValue) |> ignore
-      sb.AppendLine("</tr>") |> ignore
-    sb.AppendLine("</table>") |> ignore
-    sb.ToString()
-  and printList(level)(o) = 
-    let list = o :?> IEnumerable
-    let sb = new StringBuilder()
-    sb.AppendLine("<table>") |> ignore
-    for item in list do
-      sb.AppendLine(sprintf "<tr><td>%s</td></tr>" (item |> printAny (level - 1))) |> ignore
-    sb.AppendLine("</table>") |> ignore
-    sb.ToString()
+    let typeInfo = new TypeInfo(o)
+    sb.AppendLine("<table class='table table-bordered table-striped'>") |> ignore
+    for g in typeInfo.PrimitiveMembers do
+        let value = g.Get(o) |> render
+        sb.AppendFormat("<tr><th>{0}</th><td>{1}</td></tr>", g.Name, value) |> ignore
+    for g in typeInfo.ObjectMembers do
+        let link = sprintf "<a href='%s'>%s</a>" g.Name g.Name
+        let value = g.Get(o) |> render
+        sb.AppendFormat("<tr><th>{0}</th><td>{1}</td></tr>", link, value) |> ignore
     
-  fun (input:'a) -> input |> printAny 5
+    sb.AppendLine("</table>") |> ignore
+    sb.ToString()
+
+let printList(render:obj -> string) (list:IEnumerable) = 
+    let sb = new StringBuilder()
+    sb.AppendLine("<table class='table table-bordered table-striped'>") |> ignore
+    for item in list do
+        let value = item |> render
+        sb.AppendFormat("<tr><td>{0}</td></tr>", value) |> ignore
+    done
+    sb.AppendLine("</table>") |> ignore
+    sb.ToString()
+
+let printGenericList(render:obj -> string) (getters:MemberGetter list) (list:IEnumerable) =
+    let sb = new StringBuilder()
+    sb.AppendLine("<table class='table table-bordered table-striped'>") |> ignore
+    sb.AppendLine("<thead>") |> ignore
+    for g in getters do
+        sb.AppendFormat("<th>{0}</th>", g.Name) |> ignore
+    sb.AppendLine("</thead>") |> ignore
+    sb.AppendLine("<tbody>") |> ignore
+    for item in list do
+        sb.AppendLine("<tr>") |> ignore
+        for g in getters do
+            let value = g.Get(item) |> render
+            sb.AppendFormat("<td>{0}</td>", value) |> ignore
+        //let value = item |> render
+        sb.AppendLine("</tr>") |> ignore
+    done
+    sb.AppendLine("</tbody>") |> ignore
+    sb.AppendLine("</table>") |> ignore
+    sb.ToString()   
+let printBasic render (o:obj) = 
+    match o with
+    | null -> Some("null")
+    | GenericList(getters, list) -> Some(printGenericList render getters list)
+    | Object(members, prims, subObjs, enums, o1) -> Some(printObject render members o)
+    | :? int as v -> Some(v.ToString())
+    | :? String as s -> Some(s)
+    | :? DateTime as v -> Some(v.ToShortDateString())
+    | IsPrimitive(n) -> Some(n.ToString())
+    | IsNullable(n) -> Some(n.ToString())
+    | :? System.Collections.IEnumerable as s -> Some(printList render s)
+    | _ -> None
+
+let print: obj -> string = [printBasic] |> Rules.combineMax 6 getTypeName 
