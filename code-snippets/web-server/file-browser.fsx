@@ -13,9 +13,8 @@ This is my cheap imitation of LINQPad's dump
 //  I love LINQPad's dump
 #load "dumper.fsx"
 
-
-open System.IO
 open System
+open System.IO
 open Dumper
 
 type File(path:string) =
