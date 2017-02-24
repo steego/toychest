@@ -20,12 +20,12 @@ I accept pull requests, invitations to pair-program, half-baked ideas, passionat
 
 | File | What it does |
 |------|--------------|
-| file-browser.fsx | An example prototype |
-| dumper.fsx | A simple module that binds the printer and web server |
-| web-server.fsx | A simple *mutable* web server that can be updated by the REPL |
-| printer.fsx | Some hacky object printing code |
-| type-info.fsx | Some reflection code |
-| rules.fsx | An experiment that combines recursive combinators |
+| [file-browser.fsx](file-browser.fsx) | An example prototype |
+| [dumper.fsx](dumper.fsx) | A simple module that binds the printer and web server |
+| [web-server.fsx](web-server.fsx) | A simple *mutable* web server that can be updated by the REPL |
+| [printer.fsx](printer.fsx) | Some hacky object printing code |
+| [type-info.fsx](type-info.fsx) | Some reflection code |
+| [rules.fsx](rules.fsx) | An experiment that combines recursive combinators |
 
 ##  Why is everything an .FSX file and not an .FS file?
 
