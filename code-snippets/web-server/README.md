@@ -1,4 +1,4 @@
-h2. About F# Dump
+## About F# Dump
 
 This is my little prototype of an exploratory programming tool for the Ionide environment inspired 
 by LINQPad.  It's very much a work-in-progress and it's part of a talk that I'm preparing where 
@@ -10,13 +10,13 @@ you think something is lousy, tell me.  If you want to work on something togethe
 
 I accept pull requests, invitations to pair-program, half-baked ideas, passionate criticism and distractions.
 
-h2. What do I need to do?
+## What do I need to do?
 
 1. Clone the repo.
 2. Run Paket Install to fetch the Suave Nuget Package
 3. Open file-browser.fsx.  Read it and run it.
 
-h2. What are the components?
+## What are the components?
 
 | File | What it does |
 |------|--------------|
@@ -27,7 +27,7 @@ h2. What are the components?
 | type-info.fsx | Some reflection code |
 | rules.fsx | An experiment that combines recursive combinators |
 
-h2.  Why is everything an .FSX file and not an .FS file?
+##  Why is everything an .FSX file and not an .FS file?
 
 I want to keep it simple and fun to experiment.  I'm open to alternative suggestions.
 
