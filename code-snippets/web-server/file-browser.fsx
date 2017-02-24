@@ -1,7 +1,11 @@
 (*
 
+This is my cheap imitation of LINQPad's dump
 
-*)  
+1. There's an object printer
+2. You can execute the whole file by hitting F5
+
+*)
 
 //  Loading this twice breaks it
 //  Comment out after the first load
@@ -13,14 +17,14 @@ open System
 open System.IO
 open Dumper
 
-type File(path:string) = 
+type File(path:string) =
     let info = new FileInfo(path)
     member this.Name = info.Name
     member this.Size = info.Length
 
-type Folder(path:string) = 
+type Folder(path:string) =
   member this.Path = path
-  member this.Files = 
+  member this.Files =
     Directory.EnumerateFiles(path)
     |> Seq.map File
     |> Seq.toList
@@ -30,6 +34,12 @@ type Folder(path:string) =
      |> Seq.toArray
 
 let path = @"C:\Projects\github.com\steego\toychest"
+
+//  My dump method.  Take an object and the max depth
 dump(Folder(path), 7)
 
-//dump("Hello", 4)
+//  I'd love feedback and suggestions.
+//  You can play with it my cloning the repo
+
+//  Until next time
+
