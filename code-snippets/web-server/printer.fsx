@@ -1,3 +1,5 @@
+//  Converts objects to HTML
+
 module Printer
 
 #load "type-info.fsx"

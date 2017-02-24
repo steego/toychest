@@ -1,3 +1,5 @@
+//  An experiment in combining recursive functions
+
 module Rules
 
 type Rule<'a,'b> = ('a -> 'b) -> 'a -> 'b option

@@ -1,3 +1,5 @@
+//  A reflection module to extract information about types
+
 module TypeInfo
 
 open System
