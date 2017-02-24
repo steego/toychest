@@ -1,6 +1,6 @@
 module Dumper
 
-#load "web-server.fsx"
+//#load "web-server.fsx"
 #load "printer.fsx"
 
 open System
@@ -17,10 +17,12 @@ let HeadTemplate = @"
   </head>
 "
 
-let dump(value:'a) = WebServer.update(fun (ctx:HttpContext) -> async {
-                            let path = ctx.request.path
-                            let print = Printer.print
-                            let html = sprintf "<html>%s<body>%s</body></html>" HeadTemplate (print (value :> obj))
-                            return! Successful.OK html ctx
-                        })
+let dump(value:'a, level) = 
+  WebServer.update(fun (ctx:HttpContext) -> async {
+        let path = ctx.request.path
+        let print = Printer.print
+        let o = value :> obj
+        let html = sprintf "<html>%s<body>%s</body></html>" HeadTemplate (print(o, level))
+        return! Successful.OK html ctx
+    })
 

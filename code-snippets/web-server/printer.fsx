@@ -21,7 +21,13 @@ let printObject(render:obj -> string) (getters:MemberGetter list) (o:obj) =
         let link = sprintf "<a href='%s'>%s</a>" g.Name g.Name
         let value = g.Get(o) |> render
         sb.AppendFormat("<tr><th>{0}</th><td>{1}</td></tr>", link, value) |> ignore
-    
+    for g in typeInfo.EnumerableMembers do
+        //let link = sprintf "<a href='%s'>%s</a>" g.Name g.Name
+        let value = g.Get(o) |> render
+        sb.AppendFormat("<tr><th colspan='2'>{0}</th></tr>", g.Name) |> ignore
+        sb.AppendFormat("<tr><td colspan='2'>{0}</td></tr>", value) |> ignore
+
+
     sb.AppendLine("</table>") |> ignore
     sb.ToString()
 
@@ -67,4 +73,6 @@ let printBasic render (o:obj) =
     | :? System.Collections.IEnumerable as s -> Some(printList render s)
     | _ -> None
 
-let print: obj -> string = [printBasic] |> Rules.combineMax 6 getTypeName 
+let print(o:obj, level:int) : string = 
+    let fn = [printBasic] |> Rules.combineMax level getTypeName 
+    fn(o)

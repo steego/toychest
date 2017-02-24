@@ -13,7 +13,9 @@ let isEnumerable(e:obj) =
     | :? seq<_> -> true
     | _ -> false
 
-let isSeq(t:System.Type) = t.GetInterface(typeof<System.Collections.IEnumerable>.Name) |> isNull |> not
+let isSeq(t:System.Type) = 
+    t <> typeof<string> &&
+    t.GetInterface(typeof<System.Collections.IEnumerable>.Name) |> isNull |> not
 let isGenericSeq(t:Type) = isSeq(t) && t.GenericTypeArguments.Length >= 1
 
 
@@ -50,7 +52,7 @@ type TypeInfo(t:Type) =
 
     let elementType = if isNull t then null else t.GenericTypeArguments.FirstOrDefault()
     let members = if isNull t then [] else getMemberGetters(t)
-    let isEnumerable = isSeq(t)
+    let isEnumerable = isSeq(t) && t <> typeof<string>
     member this.IsNull = isNull t
     member this.Members = members
     member this.PrimitiveMembers = members |> List.filter(fun m -> isPrimitiveType m.Type)
