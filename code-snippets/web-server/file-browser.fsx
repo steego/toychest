@@ -38,8 +38,12 @@ let path = @"C:\Projects\github.com\steego\toychest"
 //  My dump method.  Take an object and the max depth
 dump(Folder(path), 7)
 
+<<<<<<< HEAD
 //  I'd love feedback and suggestions.
 //  You can play with it my cloning the repo
 
 //  Until next time
 
+=======
+//dump("Hello", 4)
+>>>>>>> 2e023ab4d4bd8b3603b87a8cf6428cb3736ee55e
