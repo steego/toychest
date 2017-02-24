@@ -1,10 +1,12 @@
+//  Combines the web server with the printer
+
 module Dumper
 
 //#load "web-server.fsx"
 #load "printer.fsx"
 
-open System
-open Suave
+open System // 
+open Suave //
 
 WebServer.start()
 
