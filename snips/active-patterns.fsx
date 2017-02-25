@@ -20,3 +20,8 @@ let tellMeAbout(s:string) =
     | Odd(value) -> sprintf "%i is odd!" value
     | Even(value) -> sprintf "%i is even!" value
     | String(value) -> sprintf "%s is a string!" value
+
+//  Per this example, active patterns are used in 
+//  conjunction wit the match with syntax (Pattern matching)
+
+//  Well talk more.  See you soon...
