@@ -31,11 +31,9 @@ type Folder(path:string) =
    member this.SubFolders =
      Directory.EnumerateDirectories(path)
      |> Seq.map Folder
-     |> Seq.toArray
+     |> Seq.toList
 
 let path = @"C:\Projects\github.com\steego\toychest"
 
 //  My dump method.  Take an object and the max depth
-dump(Folder(path), 7)
-
-//dump("Hello", 4)
+Folder(path) |> dump 2

@@ -1,80 +1,102 @@
-//  Converts objects to HTML
-
 module Printer
 
 #load "type-info.fsx"
 #load "rules.fsx"
+#load "html.fsx"
 
 open System
 open System.Text
 open System.Collections
+open System.Linq
 open TypeInfo
 
-let getTypeName(o:obj) = sprintf "Not matched: %s" (o.GetType().FullName)
+let div = Html.makeTag "div"
+let table = Html.makeTag "table"
+let thead = Html.makeTag "thead"
+let tbody = Html.makeTag "tbody"
+let tr = Html.makeTag "tr"
+let th = Html.makeTag "th"
+let td = Html.makeTag "td"
 
-let printObject(render:obj -> string) (getters:MemberGetter list) (o:obj) =
-    let sb = new StringBuilder()
-    let typeInfo = new TypeInfo(o)
-    sb.AppendLine("<table class='table table-bordered table-striped'>") |> ignore
-    for g in typeInfo.PrimitiveMembers do
-        let value = g.Get(o) |> render
-        sb.AppendFormat("<tr><th>{0}</th><td>{1}</td></tr>", g.Name, value) |> ignore
-    for g in typeInfo.ObjectMembers do
-        let link = sprintf "<a href='%s'>%s</a>" g.Name g.Name
-        let value = g.Get(o) |> render
-        sb.AppendFormat("<tr><th>{0}</th><td>{1}</td></tr>", link, value) |> ignore
-    for g in typeInfo.EnumerableMembers do
-        //let link = sprintf "<a href='%s'>%s</a>" g.Name g.Name
-        let value = g.Get(o) |> render
-        sb.AppendFormat("<tr><th colspan='2'>{0}</th></tr>", g.Name) |> ignore
-        sb.AppendFormat("<tr><td colspan='2'>{0}</td></tr>", value) |> ignore
+let getTypeName(o:obj) = Html.Text( sprintf "Not matched: %s" (o.GetType().FullName))
 
+let keyValueRow(name:string, value:Html.Tag) = tr [] [ th [] [ Html.Text(name) ]; td [] [ value ] ]
 
-    sb.AppendLine("</table>") |> ignore
-    sb.ToString()
+let info = new TypeInfo.TypeInfo(null)
 
-let printList(render:obj -> string) (list:IEnumerable) = 
-    let sb = new StringBuilder()
-    sb.AppendLine("<table class='table table-bordered table-striped'>") |> ignore
-    for item in list do
-        let value = item |> render
-        sb.AppendFormat("<tr><td>{0}</td></tr>", value) |> ignore
-    done
-    sb.AppendLine("</table>") |> ignore
-    sb.ToString()
+let maxTake = 100
 
-let printGenericList(render:obj -> string) (getters:MemberGetter list) (list:IEnumerable) =
-    let sb = new StringBuilder()
-    sb.AppendLine("<table class='table table-bordered table-striped'>") |> ignore
-    sb.AppendLine("<thead>") |> ignore
-    for g in getters do
-        sb.AppendFormat("<th>{0}</th>", g.Name) |> ignore
-    sb.AppendLine("</thead>") |> ignore
-    sb.AppendLine("<tbody>") |> ignore
-    for item in list do
-        sb.AppendLine("<tr>") |> ignore
-        for g in getters do
-            let value = g.Get(item) |> render
-            sb.AppendFormat("<td>{0}</td>", value) |> ignore
-        //let value = item |> render
-        sb.AppendLine("</tr>") |> ignore
-    done
-    sb.AppendLine("</tbody>") |> ignore
-    sb.AppendLine("</table>") |> ignore
-    sb.ToString()   
-let printBasic render (o:obj) = 
-    match o with
-    | null -> Some("null")
-    | GenericList(getters, list) -> Some(printGenericList render getters list)
-    | Object(members, prims, subObjs, enums, o1) -> Some(printObject render members o)
-    | :? int as v -> Some(v.ToString())
-    | :? String as s -> Some(s)
-    | :? DateTime as v -> Some(v.ToShortDateString())
-    | IsPrimitive(n) -> Some(n.ToString())
-    | IsNullable(n) -> Some(n.ToString())
-    | :? System.Collections.IEnumerable as s -> Some(printList render s)
-    | _ -> None
+let rec print (level:int) = 
+    let rec print (level:int) (o:obj) : Html.Tag =         
+        if level < 1 then
+            match o with
+            | null -> Html.Text("<null>")
+            | :? int as v -> Html.Text(v.ToString())
+            | :? String as s -> Html.Text(s)
+            | :? DateTime as v -> Html.Text(v.ToShortDateString())
+            | IsPrimitive(n) -> Html.Text(n.ToString())
+            | IsNullable(n) -> Html.Text(n.ToString())
+            | GenericList(getters, list) -> Html.Text("List...")
+            | :? System.Collections.IEnumerable as s -> Html.Text("List...")
+            | Object(members, prims, subObjs, enums, o1) -> Html.Text("Object...")
+            | _ -> Html.Text("...")
+        else
+            match o with
+            | null -> Html.Text("<null>")
+            | :? int as v -> Html.Text(v.ToString())
+            | :? String as s -> Html.Text(s)
+            | :? DateTime as v -> Html.Text(v.ToShortDateString())
+            | IsPrimitive(n) -> Html.Text(n.ToString())
+            | IsNullable(n) -> Html.Text(n.ToString())
+            | GenericList(getters, list) -> printGenericList (level - 1)  getters list
+            | :? System.Collections.IEnumerable as s -> printList (level - 1) s
+            | Object(members, prims, subObjs, enums, o1) -> printObject (level - 1) members o
+            | _ -> Html.Text("...")        
 
-let print(o:obj, level:int) : string = 
-    let fn = [printBasic] |> Rules.combineMax level getTypeName 
-    fn(o)
+    and printObject (level:int) (getters:MemberGetter list) =
+        fun (o:obj) ->
+            let sb = new StringBuilder()
+            let typeInfo = new TypeInfo(o)
+            let primativeMembers = typeInfo.PrimitiveMembers
+            table 
+                [("class", "table table-bordered table-striped")]
+                [   
+                    //  Show primitive members
+                    for g in primativeMembers do
+                        let value = g.Get(o) |> print level
+                        yield keyValueRow(g.Name, value)
+                    //  Show object members
+                    for g in typeInfo.ObjectMembers do
+                        let value = g.Get(o) |> print level
+                        yield keyValueRow(g.Name, value)
+                    //  Show enumerable members
+                    for g in typeInfo.EnumerableMembers do
+                        let value = g.Get(o) |> print level
+                        yield tr [] [ 
+                            th [("colspan", "1")] [ Html.Text(g.Name) ] 
+                            td [("colspan", "1")] [ value ]
+                        ]
+                ]
+
+    and printList (level:int) (list:IEnumerable) = 
+        let list = seq { for o in list -> o }
+        table [("class", "table table-bordered table-striped")]
+              [  for item in list.Take(maxTake) do
+                    let value = item |> print level
+                    yield tr [] [ td [] [ value ] ] 
+              ]
+
+    and printGenericList (level:int) (getters:MemberGetter list) (list:IEnumerable) =
+        let list = seq { for o in list -> o }
+        table 
+            [("class", "table table-bordered table-striped")]
+            [ thead [] [ for g in getters -> th [] [ Html.Text(g.Name) ] ]
+              tbody [] [ for item in list.Take(maxTake) do
+                            yield tr [] [ for g in getters do
+                                            let value = g.Get(item) |> print level 
+                                            yield td [] [ value ]
+                                        ] 
+                       ]
+            ]
+    fun (o:obj) -> (print level o).ToString()
+
