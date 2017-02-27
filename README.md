@@ -39,7 +39,7 @@ At the end, we want to encourage you to share your thing *somewhere*.
 
 I want to encourage you to be really creative and try something.  Anything.
 
-* [Small prototypes](code-snippets/patterns/singleton-maker.fsx)
+* [Small prototypes](code-snippets/minimally-implemented/singleton-maker.fsx)
 * A snippet showing how to use your favorite library or tool
 * A screencast
 * A small koan
