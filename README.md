@@ -41,7 +41,7 @@ I want to encourage you to be really creative and try something.  Anything.
 
 * [Small prototypes](code-snippets/minimally-implemented/singleton-maker.fsx)
 * A snippet showing how to use your favorite library or tool
-* A screencast
+* [A screencast](https://twitter.com/FSharpCasts/status/833729161046933504)
 * A small koan
 * An open problem for other people to solve
 * A data model that's expressed nicely in F#
