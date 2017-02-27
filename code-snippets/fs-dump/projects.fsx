@@ -36,4 +36,4 @@ let peopleList = [
   }
 ]
 
-dump(peopleList)
+peopleList |> dump 3

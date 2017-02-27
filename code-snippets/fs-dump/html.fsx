@@ -30,13 +30,5 @@ type Tag =
         
 let makeTag (name:string) = 
     let tag(attributes:(string * string) list) (body:Tag list) = 
-        // let newBody = [ for child in body do
-        //                     match child with
-        //                     | null -> ()
-        //                     | :? Tag as t -> yield t
-        //                     | :? list<Tag> as list -> yield! list
-        //                     | :? string as s -> yield Text(s)
-        //                     | o -> yield Text(o.ToString())
-        //             ]
         Tag(name, (Map.ofList attributes), body)    
     tag
