@@ -1,5 +1,6 @@
 #r @"..\..\packages\Eto.Forms\lib\net45\Eto.dll"
 #r @"..\..\packages\Eto.Platform.Windows\lib\net45\Eto.WinForms.dll"
+//  What do you have to do to get this working on the Mac or Linux/GTK?
 
 open System
 open Eto.Drawing
