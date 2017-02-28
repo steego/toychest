@@ -1,3 +1,5 @@
 source https://www.nuget.org/api/v2
 
 nuget Suave
+nuget Eto.Platform.Windows
+//nuget Eto.Platform.Gtk3
