@@ -31,3 +31,12 @@ let dump (level:int) (value:'a) =
         return! Successful.OK html ctx
     })
 
+let dumpPath (level:int) (getValue:string list -> 'a) = 
+  WebServer.update(fun (ctx:HttpContext) -> async {
+        let path : string = ctx.request.path
+        let items = path.Split('/') |> List.ofArray
+        let o = getValue items :> obj
+        let tag = o |> print level
+        let html = sprintf "<html>%s<body>%s</body></html>" HeadTemplate (tag.ToString())
+        return! Successful.OK html ctx
+    })

@@ -4,6 +4,9 @@ module Printer
 #load "rules.fsx"
 #load "html.fsx"
 
+type IPrintable =
+    abstract member ToHtml: unit -> Html.Tag
+
 open System
 open System.Text
 open System.Collections
@@ -22,41 +25,33 @@ let getTypeName(o:obj) = Html.Text( sprintf "Not matched: %s" (o.GetType().FullN
 
 let keyValueRow(name:string, value:Html.Tag) = tr [] [ th [] [ Html.Text(name) ]; td [] [ value ] ]
 
-let info = new TypeInfo.TypeInfo(null)
+let info = TypeInfo.TypeInfo(null)
 
 let maxTake = 100
 
 let rec print (level:int) = 
     let rec print (level:int) (o:obj) : Html.Tag =         
-        if level < 1 then
-            match o with
-            | null -> Html.Text("<null>")
-            | :? int as v -> Html.Text(v.ToString())
-            | :? String as s -> Html.Text(s)
-            | :? DateTime as v -> Html.Text(v.ToShortDateString())
-            | IsPrimitive(n) -> Html.Text(n.ToString())
-            | IsNullable(n) -> Html.Text(n.ToString())
-            | GenericList(getters, list) -> Html.Text("List...")
-            | :? System.Collections.IEnumerable as s -> Html.Text("List...")
-            | Object(members, prims, subObjs, enums, o1) -> Html.Text("Object...")
-            | _ -> Html.Text("...")
-        else
-            match o with
-            | null -> Html.Text("<null>")
-            | :? int as v -> Html.Text(v.ToString())
-            | :? String as s -> Html.Text(s)
-            | :? DateTime as v -> Html.Text(v.ToShortDateString())
-            | IsPrimitive(n) -> Html.Text(n.ToString())
-            | IsNullable(n) -> Html.Text(n.ToString())
-            | GenericList(getters, list) -> printGenericList (level - 1)  getters list
-            | :? System.Collections.IEnumerable as s -> printList (level - 1) s
-            | Object(members, prims, subObjs, enums, o1) -> printObject (level - 1) members o
-            | _ -> Html.Text("...")        
+        match o with
+        | null -> Html.Text("<null>")
+        | :? Html.Tag as t -> t
+        | :? IPrintable as p -> p.ToHtml()
+        | :? int as v -> Html.Text(v.ToString())
+        | :? String as s -> Html.Text(s)
+        | :? DateTime as v -> Html.Text(v.ToShortDateString())
+        | IsPrimitive(n) -> Html.Text(n.ToString())
+        | IsNullable(n) -> Html.Text(n.ToString())
+        | GenericList(t, getters, list) -> 
+            if level < 1 then Html.Text("List...") else printGenericList (level - 1)  t getters list
+        | :? System.Collections.IEnumerable as s -> 
+            if level < 1 then Html.Text("List...") else printList (level - 1) s
+        | Object(members, prims, subObjs, enums, o1) -> 
+            if level < 1 then Html.Text("Object...") else printObject (level - 1) members o
+        | _ -> Html.Text("...")
 
     and printObject (level:int) (getters:MemberGetter list) =
         fun (o:obj) ->
-            let sb = new StringBuilder()
-            let typeInfo = new TypeInfo(o)
+            let sb = StringBuilder()
+            let typeInfo = TypeInfo(o)
             let primativeMembers = typeInfo.PrimitiveMembers
             table 
                 [("class", "table table-bordered table-striped")]
@@ -86,17 +81,25 @@ let rec print (level:int) =
                     yield tr [] [ td [] [ value ] ] 
               ]
 
-    and printGenericList (level:int) (getters:MemberGetter list) (list:IEnumerable) =
+    and printGenericList (level:int) (t:TypeInfo) (getters:MemberGetter list) (list:IEnumerable) =
         let list = seq { for o in list -> o }
-        table 
-            [("class", "table table-bordered table-striped")]
-            [ thead [] [ for g in getters -> th [] [ Html.Text(g.Name) ] ]
-              tbody [] [ for item in list.Take(maxTake) do
-                            yield tr [] [ for g in getters do
-                                            let value = g.Get(item) |> print level 
-                                            yield td [] [ value ]
-                                        ] 
-                       ]
-            ]
+        if t.IsPrimitive then
+            table
+                [("class", "table table-bordered table-striped")]
+                [
+                    tbody [] [ for item in list.Take(maxTake) -> item |> print level ]
+                ]
+        else
+            table 
+                [("class", "table table-bordered table-striped")]
+                [ 
+                    thead [] [ for g in getters -> th [] [ Html.Text(g.Name) ] ]
+                    tbody [] [ for item in list.Take(maxTake) do
+                                yield tr [] [ for g in getters do
+                                                let value = g.Get(item) |> print level 
+                                                yield td [] [ value ]
+                                            ] 
+                                ]
+                ]
     fun (o:obj) -> (print level o).ToString()
 

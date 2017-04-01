@@ -9,7 +9,7 @@ This is my cheap imitation of LINQPad's dump
 
 //  Loading this twice breaks it
 //  Comment out after the first load
-//#load "web-server.fsx"
+#load "web-server.fsx"
 //  I love LINQPad's dump
 #load "dumper.fsx"
 
@@ -18,12 +18,14 @@ open System.IO
 open Dumper
 
 type File(path:string) =
-    let info = new FileInfo(path)
+    let info = FileInfo(path)
     member this.Name = info.Name
     member this.Size = info.Length
 
+let link href text = Html.makeTag "a" [("href", href)] [ Html.Text(text) ]
+
 type Folder(path:string) =
-  member this.Path = path
+  member this.Path = link path path
   member this.Files =
     Directory.EnumerateFiles(path)
     |> Seq.map File
@@ -33,7 +35,26 @@ type Folder(path:string) =
      |> Seq.map Folder
      |> Seq.toList
 
-let path = @"C:\Projects\github.com\steego\toychest"
+//let path = @"C:\Projects\github.com\steego\toychest"
+let rootPath = "/Users/sgoguen/"
+
+let walkObject (path:string list) (value:'a) : obj = 
+  value :> obj
+
+let getPath(path:string list) = 
+  let selectedPath = String.Join("/", (path |> List.toArray))
+  Folder(Path.Combine(rootPath, selectedPath))
+
+type NavTree<'a>(value:'a, getChildren:'a -> seq<'a>) = 
+  member this.Value = value
+  member this.Children = seq { for c in getChildren value do
+                                  yield NavTree(c, getChildren) }
 
 //  My dump method.  Take an object and the max depth
-Folder(path) |> dump 2
+//getPath |> dumpPath 2
+
+let root = "/"
+// IO.Directory.EnumerateDirectories(root)
+
+NavTree(root, fun d -> IO.Directory.EnumerateDirectories(d)) 
+  |> dump 4

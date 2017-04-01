@@ -6,7 +6,9 @@ open System
 open System.Collections
 open System.Reflection
 open System.Linq
-let isPrimitiveType(t:Type) = t <> null && (t.IsValueType || t = typeof<string>)
+
+
+let isPrimitiveType(t:Type) = isNull t = false && (t.IsValueType || t = typeof<string>)
 let isPrimitiveObject(o:obj) = (isNull o || isPrimitiveType(o.GetType()))
 let isEnumerable(e:obj) =
     match e with
@@ -14,9 +16,6 @@ let isEnumerable(e:obj) =
     | :? string as s -> false
     | :? IEnumerable -> true
     | _ -> false
-
-
-
 let isSeq(t:System.Type) = 
     t <> null &&
     t <> typeof<string> &&
@@ -100,18 +99,18 @@ let (|GenericList|_|)(o:obj) =
         let t = o.GetType()
         let ti = TypeInfo(t)
         if ti.IsGenericSeq then
-            if ti.IsPrimitive = false then
+            if not ti.IsPrimitive then
                 let getters = ti.ElementType.Members
                 let list = o :?> IEnumerable
-                Some(getters, list)
+                Some(ti, getters, list)
             else 
                 None
         elif t.IsArray && t.HasElementType then
             let ti = TypeInfo(t.GetElementType())
-            if ti.IsPrimitive = false then
+            if not ti.IsPrimitive then
                 let getters = ti.ElementType.Members
                 let list = o :?> IEnumerable
-                Some(getters, list)
+                Some(ti, getters, list)
             else 
                 None                
         else None

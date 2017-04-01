@@ -1,13 +1,15 @@
 //  A simple mutable web server
 
-module WebServer //
+module WebServer
 
 #if INTERACTIVE
+#r "System.Net.dll"
 #r "../../packages/Suave/lib/net40/Suave.dll"
 #endif
 
 //  Encapsulate everything in 
 open Suave
+open System.Net
 
 let private started = ref false
 let private mainWebPart = ref (Successful.OK "Welcome")
