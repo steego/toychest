@@ -58,3 +58,11 @@ let root = "/"
 
 NavTree(root, fun d -> IO.Directory.EnumerateDirectories(d)) 
   |> dump 4
+
+open System.Threading
+
+for i in 1..10000 do
+  printfn "Counting %i" i
+  Thread.Sleep(10000)
+
+Console.WriteLine("Restarting")
