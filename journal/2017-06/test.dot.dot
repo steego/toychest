@@ -1,0 +1,17 @@
+digraph G {
+	graph [bb="0,0,67.367,122",
+		splines=FALSE
+	];
+	node [label="\N"];
+	person	 [URL="http://en.wikipedia.org/wiki/John de Fries",
+		height=0.5,
+		label=person,
+		pos="33.684,18",
+		width=0.93566];
+	F1	 [height=0.5,
+		pos="33.684,104",
+		width=0.75];
+	F1 -> person	 [label=.63,
+		lp="42.434,61",
+		pos="e,33.684,36.212 33.684,85.762 33.684,74.36 33.684,59.434 33.684,46.494"];
+}

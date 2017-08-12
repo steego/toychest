@@ -1,0 +1,29 @@
+digraph G {
+    splines="FALSE";
+    rankdir=LR;
+
+    /* Entities */
+    user [label="user|name|age", shape="record", URL="user.html"]
+    root [label="/", shape="record"]
+
+    /* Relationships */
+    //F1 -> person[label=".63"]
+
+    root -> users;
+    users -> user[label="{id:int}"];
+
+    root -> customers;
+    customers -> customer[label="{id:int}"]
+    customer -> orders[label="has", style="dotted"];
+    customer -> users[label="is a", style="dotted"];
+    
+    root -> orders;
+    orders -> order;
+    order -> line;
+
+    { rank=same; users customers orders }
+
+
+    /* Ranks */
+    // { rank=|same,min,max,# max is bottom|; person; };
+}
