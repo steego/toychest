@@ -6,6 +6,10 @@
 *.user
 *.sln.docstates
 
+# Binaries
+*.dll
+*.exe
+
 # Xamarin Studio / monodevelop user-specific
 *.userprefs
 *.dll.mdb
