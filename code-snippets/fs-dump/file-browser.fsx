@@ -62,7 +62,7 @@ NavTree(root, fun d -> IO.Directory.EnumerateDirectories(d))
 open System.Threading
 
 for i in 1..10000 do
-  printfn "Counting %i" i
+  printfn "Heartbeat - %s" (DateTime.Now.ToString())
   Thread.Sleep(10000)
 
 Console.WriteLine("Restarting")
