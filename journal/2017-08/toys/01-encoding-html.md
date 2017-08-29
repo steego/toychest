@@ -116,4 +116,27 @@ type Tag with
         sw.ToString()
 ````
 
-That should be enough to get us started.  Until next time.
+That should be enough to get us started.  If we were to take our example and run it:
+
+````fsharp
+let myFanPage =
+    div [] [
+        h1 [] [Text("My Taylor Swift Fan Page")]
+        p [] [Text("She's simply amazing...")]
+    ]
+
+printfn(myFanPage.ToString())
+````
+
+We would expect an output that loosely resembles:
+
+````html
+<div>
+  <h1>My Taylor Swift Fan Page</h1>
+  <p>She's simply amazing...</p>
+</div>
+````
+
+There's nothing particularly exciting about this example, but stay tuned because 
+I'm going to show you how we use this as a building block to create some useful  
+components.
