@@ -27,12 +27,16 @@
   function onOpen(evt)
   {
     writeToScreen("CONNECTED");
-    doSend("WebSocket rocks");
+    doSend("Connected");
   }
 
   function onClose(evt)
   {
     writeToScreen("DISCONNECTED");
+    setTimeout(function() {
+      //  Try to connect again in 5 seconds
+      init();
+    }, 5000);
   }
 
   function onMessage(evt)
@@ -61,7 +65,5 @@
   window.addEventListener("load", init, false);
 
 </script>
-
-<h2>WebSocket Test</h2>
 
 <div id="output"></div>

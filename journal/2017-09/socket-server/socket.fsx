@@ -73,6 +73,11 @@ module Browser = begin
 
     end
 
+    let (|Message|_|) msg = 
+        match msg with
+        | (Text, data, true) -> Some(UTF8.toString data)
+        | _ -> None
+
     let private socketHandler (ws : WebSocket) (context: HttpContext) =
 
       socket {
@@ -81,22 +86,13 @@ module Browser = begin
 
         while loop do
           let! msg = ws.read()
-
           match msg with
-          | (Text, data, true) ->
-            
-            let str = UTF8.toString data
-            Sockets.onConnect(id, ws, str)
-            do! str |> Sockets.sendText ws
-
-          | (Close, _, _) ->
-            
-            Sockets.closeSocket(id)
-            //do! ws.send Close emptyResponse true
-            loop <- false
-
+          | Message(str) -> Sockets.onConnect(id, ws, str)
+          | (Close, _, _) -> Sockets.closeSocket(id)
+                             loop <- false
           | _ -> ()
-        }
+        done
+      }
 
 
     let app : WebPart = 
@@ -115,10 +111,11 @@ end
 open System
 
 Async.Start(async {
-    while true do 
-        let time = sprintf "<b>Current Time</b>: <i>%s</i>" (DateTime.Now.ToString())
-        Browser.sendHtml(time)
-        do! Async.Sleep(1000)
+    for x in 1..1000 do
+        let msg = sprintf "Counting: %i" x
+        Browser.sendHtml(msg)
+        do! Async.Sleep(200)
+    Browser.sendHtml("<b>All Done Now!</b>")
 })
 
-do Browser.start()
+Browser.start()
