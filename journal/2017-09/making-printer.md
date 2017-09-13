@@ -1,4 +1,4 @@
-# How to Make an Object Printer in F#
+# Making Toys in F# - How to Make an Object Printer
 
 If you know me, you know LinqPad is one of my favorite tools of all time.  It's 
 a simple code snippet tool with some pretty incredible features.  One of my
@@ -15,38 +15,75 @@ person.Dump();
 
 You end up with something that looks like this:
 
-<insert picture>
+<table>
+<tr><th>Name</th><td>Bob Jobes</td></tr>
+<tr><th>Position</th><td>Developer</td></tr>
+<tr><th>DateStarted</th><td>2017-09-13 12:34 PM</td></tr>
+</table>
 
 In that spirit, I want to show you how you can make your own toy object dumper and 
 then I can show you how we can make it better. 
 
-## Start with Simple Reflection
+## Let's Start by Abstracting and Modeling Our Printer's Rules
 
-In order to create an object dumper, we’ll need to use reflection to get information about an object.  For example, is the type of thing we're printing a simple primitive type like a string or a boolean?  Is it an object with public properties?  Is it enumerable?  Is it a generic type?
+In order to create an object dumper, we know we're going to need to use some type of reflection.  But what type of information do we want to get?  At this point, I think it makes sense to list out a few use cases to help guide us so we can start prototyping and playing.
 
-All of these questions are important if we're going to use that information to figure out how we're going to print an object. 
+Here's where I want to start:
 
-To get started, we'll keep things simple and start with a few use cases:
-
-* Primitives are printed using default ToString method. 
-* Simple objects should show names and values of their properties 
-* Enumerable types should display values in a grid.
+* For simple objects, I want to simply show the property names and values
+* For list-like objects, I want to print them in a grid with property names as the header
+* Primitive types should be printed with their .ToString method for now.
 * Our printer should be recursive, but always limit the depth to some maximum.
 
-## Encoding our Rules into Types 
+## Abstracting our Requirements with Types
 
-Let's spend a little time thinking about our rule by thinking about how we might represent those rules.
-
-First, we're making a function.  Let's assume this function is going to accept any type of 
-input and return some HTML output.  Here's a first stab and one way at encoding this:
+First, we know we're making a function.  That prints some HTML.  Let's write that down in F# just 
+for our edification.  Here's a first stab
 
 ```fsharp
 // We'll just assume Html is a string for now, but we may switch it something more structured later.
 type Html = string
 
-//  A printer is simply an function that takes any System.Object and returns Html
+//  A printer is just a function that takes any System.Object and returns some Html
 type Printer = obj -> Html
 ```
+
+That makes sense, but how do we abstract our list?
+
+Well, we know there are two steps to printing an object.  
+
+1. Get the description the object we're printing
+2. Format our object's description in HTML
+
+## Describing an Object
+
+There are many ways we can describe an object.  Rather than getting hung up on a perfect way, let's start 
+someplace and improve on it.
+
+```fsharp
+type PropertyName = string
+type ValueAsString = string
+
+type DescribedObject = 
+  | Primitive of string  // Primitives are always convertable to strings
+  | SimpleObject of Map<PropertyName, DescribedObject>
+  | EnumerableObject of Set<PropertyName> * seq<DescribedObject>
+  
+type ObjectDescriber = obj -> DescribedObject
+```
+
+Here's our starting point.  We're basically saying, there's a type of function called an ObjectDescriber
+that takes an obj (System.Object) as an input, and returns a DescribedObject as the output.  Our simple described
+object will either say:
+
+* It's a primitive type, and here's the string representation of it.
+* It's a simple object with a map of property names to DescribedObjects
+* It's an enumerable object with a set of common property names and a sequence of described objects
+
+Again, this isn't complete.  It's a starting point.  We're making a toy to prototype an idea.
+
+## 
+
 
 ## Breaking it Down - First Describe Our Objects, Then Print that Description
 
