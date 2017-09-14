@@ -5,48 +5,59 @@
 <title>WebSocket Test</title>
 
 <script language="javascript" type="text/javascript">
+
   var wsUri = "ws://localhost:8080/websocket";
   var output;
 
-  function init() {
+  function init()
+  {
     output = document.getElementById("output");
     testWebSocket();
   }
 
-  function testWebSocket() {
+  function testWebSocket()
+  {
     websocket = new WebSocket(wsUri);
-    websocket.onopen = function (evt) { onOpen(evt) };
-    websocket.onclose = function (evt) { onClose(evt) };
-    websocket.onmessage = function (evt) { onMessage(evt) };
-    websocket.onerror = function (evt) { onError(evt) };
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
   }
 
-  function onOpen(evt) {
-    writeToScreen("Connected");
+  function onOpen(evt)
+  {
+    writeToScreen("CONNECTED");
     doSend("Connected");
   }
 
-  function onClose(evt) {
-    writeToScreen("Disconnected.  Will reconnect in 5 seconds.");
-    setTimeout(function () {
+  function onClose(evt)
+  {
+    writeToScreen("DISCONNECTED");
+    setTimeout(function() {
+      //  Try to connect again in 5 seconds
       init();
     }, 5000);
   }
 
-  function onMessage(evt) {
+  function onMessage(evt)
+  {
     writeToScreen(evt.data);
+    // websocket.close();
   }
 
-  function onError(evt) {
+  function onError(evt)
+  {
     writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
   }
 
-  function doSend(message) {
-    writeToScreen("SENT: " + message);
+  function doSend(message)
+  {
+    writeToScreen("SENT: " + message); 
     websocket.send(message);
   }
 
-  function writeToScreen(message) {
+  function writeToScreen(message)
+  {
     var element = document.getElementById("output");
     element.innerHTML = message;
   }

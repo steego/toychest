@@ -39,6 +39,7 @@ module Tags =
     let h1 = makeTag "h1"
     let p = makeTag "p"
     let div = makeTag "div"
+    let span = makeTag "span"
     let table = makeTag "table"
     let tr = makeTag "tr"
     let th = makeTag "th"
